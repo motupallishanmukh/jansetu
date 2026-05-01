@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Interactive Story Builder — craft branching adventures with multiple endings. Pure HTML, CSS & JS." />
+<title>Mythwoven · Interactive Story Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+<!-- ===== Animated Background ===== -->
+<div class="bg-aurora" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <canvas id="starfield"></canvas>
+</div>
+
+<!-- ===== Top Nav ===== -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ffd28a"/>
+            <stop offset="100%" stop-color="#c084fc"/>
+          </linearGradient>
+        </defs>
+        <path d="M16 2 L20 12 L30 14 L22 21 L25 31 L16 25 L7 31 L10 21 L2 14 L12 12 Z" fill="url(#g1)"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-title">Mythwoven</div>
+      <div class="brand-sub">Interactive Story Builder</div>
+    </div>
+  </div>
+
+  <nav class="nav-tabs" id="navTabs">
+    <button class="tab active" data-view="home">Home</button>
+    <button class="tab" data-view="library">Library</button>
+    <button class="tab" data-view="builder">Builder</button>
+    <button class="tab" data-view="achievements">Achievements</button>
+    <button class="tab" data-view="about">About</button>
+  </nav>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="icon-btn" id="muteToggle" title="Toggle sound" aria-label="Toggle sound">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </button>
+    <button class="btn ghost" id="openAuthBtn">Sign in</button>
+    <div class="user-chip hidden" id="userChip">
+      <div class="avatar" id="userAvatar">A</div>
+      <span id="userName">Adventurer</span>
+      <button class="icon-btn small" id="logoutBtn" title="Sign out" aria-label="Sign out">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Main ===== -->
+<main id="app">
+
+  <!-- ============ HOME VIEW ============ -->
+  <section class="view active" data-view="home">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Choose Your Own Adventure · v1.0</span>
+        <h1 class="hero-title">
+          Weave worlds where <span class="gradient-text">every choice</span><br/>
+          rewrites the ending.
+        </h1>
+        <p class="hero-sub">
+          A handcrafted interactive story engine. Branching narratives, painted scenes,
+          ambient soundscapes, and your progress saved automatically — all in your browser.
+        </p>
+        <div class="hero-cta">
+          <button class="btn primary" data-goto="library">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Begin a Tale
+          </button>
+          <button class="btn ghost" data-goto="builder">Craft Your Own</button>
+        </div>
+
+        <div class="hero-stats">
+          <div><strong id="statStories">3</strong><span>Stories</span></div>
+          <div><strong id="statEndings">12+</strong><span>Endings</span></div>
+          <div><strong id="statProgress">0%</strong><span>Your Progress</span></div>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="card-stack">
+          <div class="art-card a1"></div>
+          <div class="art-card a2"></div>
+          <div class="art-card a3"></div>
+          <div class="rune">✦</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="features">
+      <h2 class="section-title">Powers of the Loom</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="feature-icon">🌿</div>
+          <h3>Branching Choices</h3>
+          <p>Every decision splits the path. Discover endings only the brave will see.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎨</div>
+          <h3>Painted Scenes</h3>
+          <p>Each chapter blooms with cinematic illustrations and parallax depth.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💾</div>
+          <h3>Auto-Saved Journey</h3>
+          <p>Close the tab, return tomorrow — your story waits exactly where you left it.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">⚒️</div>
+          <h3>Build Your Own</h3>
+          <p>A visual graph editor turns ideas into living, replayable adventures.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🏆</div>
+          <h3>Achievements</h3>
+          <p>Unlock badges for every ending discovered and choice unmade.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔊</div>
+          <h3>Ambient Sound</h3>
+          <p>Subtle Web Audio textures that breathe with your journey.</p>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ LIBRARY VIEW ============ -->
+  <section class="view" data-view="library">
+    <div class="view-head">
+      <div>
+        <h2 class="section-title">The Library</h2>
+        <p class="muted">Pick a thread. Pull. See where it unravels.</p>
+      </div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="storySearch" placeholder="Search tales by name or mood…" />
+      </div>
+    </div>
+    <div class="story-grid" id="storyGrid"></div>
+  </section>
+
+  <!-- ============ READER VIEW ============ -->
+  <section class="view" data-view="reader">
+    <div class="reader-head">
+      <button class="btn ghost small" data-goto="library">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        Library
+      </button>
+      <div class="reader-meta">
+        <span id="readerTitle">—</span>
+        <div class="progress-rail"><div class="progress-fill" id="readerProgress"></div></div>
+      </div>
+      <div class="reader-actions">
+        <button class="icon-btn" id="undoBtn" title="Undo last choice" aria-label="Undo">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg>
+        </button>
+        <button class="icon-btn" id="restartBtn" title="Restart story" aria-label="Restart">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <article class="reader" id="reader">
+      <div class="scene-img" id="sceneImg"></div>
+      <div class="scene-body">
+        <h2 class="scene-title" id="sceneTitle">…</h2>
+        <p class="scene-text" id="sceneText">…</p>
+        <div class="choices" id="choices"></div>
+        <div class="ending-card hidden" id="endingCard">
+          <div class="ending-badge">★ Ending Reached</div>
+          <h3 id="endingTitle"></h3>
+          <p id="endingDesc"></p>
+          <div class="ending-actions">
+            <button class="btn primary" id="endingRestart">Begin Anew</button>
+            <button class="btn ghost" data-goto="library">Other Tales</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="path-trail">
+      <h4>Your Path</h4>
+      <ol id="pathList"></ol>
+    </aside>
+  </section>
+
+  <!-- ============ BUILDER VIEW ============ -->
+  <section class="view" data-view="builder">
+    <div class="view-head">
+      <div>
+        <h2 class="section-title">The Loom · Builder</h2>
+        <p class="muted">Compose scenes, link choices, declare endings. Save to your library.</p>
+      </div>
+      <div class="builder-actions">
+        <button class="btn ghost small" id="builderNewScene">+ Scene</button>
+        <button class="btn ghost small" id="builderExport">Export JSON</button>
+        <button class="btn ghost small" id="builderImport">Import JSON</button>
+        <input type="file" id="builderImportFile" accept="application/json" hidden />
+        <button class="btn primary small" id="builderSave">Save to Library</button>
+      </div>
+    </div>
+
+    <div class="builder-grid">
+      <div class="builder-meta-panel">
+        <label>Story title<input id="bTitle" placeholder="The Lantern Beneath the Sea" /></label>
+        <label>Tagline<input id="bTagline" placeholder="A short, evocative hook…" /></label>
+        <label>Cover image URL<input id="bCover" placeholder="https://…" /></label>
+        <label>Mood
+          <select id="bMood">
+            <option>Mystery</option><option>Fantasy</option><option>Sci-Fi</option>
+            <option>Romance</option><option>Horror</option><option>Adventure</option>
+          </select>
+        </label>
+        <label>Starting scene
+          <select id="bStart"></select>
+        </label>
+      </div>
+
+      <div class="builder-scenes" id="bScenes"></div>
+    </div>
+  </section>
+
+  <!-- ============ ACHIEVEMENTS VIEW ============ -->
+  <section class="view" data-view="achievements">
+    <div class="view-head">
+      <div>
+        <h2 class="section-title">Trophies of the Traveler</h2>
+        <p class="muted">Endings unlocked, choices unmade, paths discovered.</p>
+      </div>
+      <button class="btn ghost small" id="resetProgress">Reset all progress</button>
+    </div>
+    <div class="ach-grid" id="achGrid"></div>
+  </section>
+
+  <!-- ============ ABOUT VIEW ============ -->
+  <section class="view" data-view="about">
+    <div class="about-card">
+      <h2 class="section-title">About Mythwoven</h2>
+      <p>
+        Mythwoven is a love letter to the choose-your-own-adventure books of old —
+        rebuilt as a single-page web experience using only <strong>HTML, CSS, and JavaScript</strong>.
+        No frameworks. No backend. Just the browser and your imagination.
+      </p>
+      <ul class="about-list">
+        <li>🪄 Vanilla JS state machine for branching scenes</li>
+        <li>🗺️ Path history with undo &amp; replay</li>
+        <li>🧩 Visual builder that writes its own story graph</li>
+        <li>🔐 LocalStorage-based accounts (multi-user on one device)</li>
+        <li>🎨 CSS Grid, custom properties, glassmorphism, parallax</li>
+        <li>🔊 Web Audio API generated ambient tones</li>
+        <li>💾 Auto-save, import/export, achievement system</li>
+      </ul>
+      <p class="muted small">Built as a self-contained demo. Open <code>index.html</code> anywhere — it just works.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ===== Auth Modal ===== -->
+<div class="modal-backdrop hidden" id="authModal">
+  <div class="modal">
+    <button class="icon-btn modal-close" id="authClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="signin">Sign in</button>
+      <button class="auth-tab" data-auth="signup">Create account</button>
+    </div>
+
+    <form id="signinForm" class="auth-form">
+      <h3>Welcome back, traveler.</h3>
+      <label>Username<input name="username" required autocomplete="username" /></label>
+      <label>Password<input name="password" type="password" required autocomplete="current-password" /></label>
+      <div class="auth-error" id="signinError"></div>
+      <button class="btn primary full" type="submit">Sign in</button>
+    </form>
+
+    <form id="signupForm" class="auth-form hidden">
+      <h3>Begin a new chronicle.</h3>
+      <label>Display name<input name="display" required /></label>
+      <label>Username<input name="username" required autocomplete="username" /></label>
+      <label>Password (min 4)<input name="password" type="password" minlength="4" required autocomplete="new-password" /></label>
+      <div class="auth-error" id="signupError"></div>
+      <button class="btn primary full" type="submit">Create account</button>
+    </form>
+
+    <p class="auth-foot muted small">Accounts live only in your browser (localStorage). No data leaves this device.</p>
+  </div>
+</div>
+
+<!-- ===== Toast container ===== -->
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script src="./stories.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
